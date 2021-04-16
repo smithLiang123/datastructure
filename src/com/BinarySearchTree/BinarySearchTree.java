@@ -71,27 +71,28 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     }
 
-    //深度优先
+    /**
+     * 深度优先
+     * */
     public void preOrder(){
         preOrder(root);
     }
     private void preOrder(Node node){
-        if (node==null)
+        if (node==null)                              //遇到NULL的时候 返回
             return;
-        System.out.println(node.e);
-        preOrder(node.leftChild);
-        preOrder(node.rightChild);
+        System.out.println(node.e);                  //1.打印node元素
+        preOrder(node.leftChild);                    //2.往left 探测
+        preOrder(node.rightChild);                   //3.往right 探测
     }
     public void midOrder(){
         midOrder(root);
     }
-    private void midOrder(Node node){
+    private void midOrder(Node node){                 //也是一种排序了
         if (node==null)
             return;
-
-        midOrder(node.leftChild);
-        System.out.println(node.e);
-        midOrder(node.rightChild);
+        midOrder(node.leftChild);                      //1.往左探测
+        System.out.println(node.e);                    //2.打印本身node 元素
+        midOrder(node.rightChild);                     //3.往右探测
     }
     public void postOrder(){
         postOrder(root);
@@ -99,35 +100,38 @@ public class BinarySearchTree<E extends Comparable<E>> {
     private void postOrder(Node node){
         if (node==null)
             return;
-        postOrder(node.leftChild);
-        postOrder(node.rightChild);
-        System.out.println(node.e);
+        postOrder(node.leftChild);                    //1.往左探测
+        postOrder(node.rightChild);                   //2.往右探测
+        System.out.println(node.e);                   //3.打印本身 node
     }
-    public void preOrderUseStack(){
+    public void preOrderUseStack(){                    //使用stack辅助 先序遍历
         Stack<Node> stack=new Stack();
-        stack.push(root);
-        while (!stack.isEmpty()){
-            Node cur=stack.pop();
+        stack.push(root);                                //1.push（root）
+        while (!stack.isEmpty()){  //当栈为空表明遍历完了
+            Node cur=stack.pop();                         //2.pop（root）
             System.out.println(cur.e);
 
-            if (cur.rightChild!=null)
-                stack.push(cur.rightChild);
-            if (cur.leftChild!=null)
-                stack.push(cur.leftChild);
+            if (cur.rightChild!=null)                     //非空
+                stack.push(cur.rightChild);                //3.push（cur.rightChild）
+            if (cur.leftChild!=null)                       //非空
+                stack.push(cur.leftChild);                  //4.push(cur.leftChild)
 
         }
     }
-    //广度优先
+
+    /**
+     * 广度优先
+     * */
     public void sequenceTravel(){
         Queue<Node> q=new LinkedList<>();
         q.add(root);
-        while (!q.isEmpty()){
+        while (!q.isEmpty()){ //层序遍历，利用了queue 入队 出队cur 入队（cur.left，cur.right） 打印cur
             Node cur=q.remove();
             if (cur.leftChild!=null)
                 q.add(cur.leftChild);
             if (cur.rightChild!=null)
                 q.add(cur.rightChild);
-            System.out.print(cur.e);
+            System.out.print(cur.e+" ");
         }
     }
     public E minimum(){
@@ -159,7 +163,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
     //删除以node为跟的二分搜索树中的最小节点
     //返回删除后的根节点
     private Node removeMin(Node node){
-        if (node.leftChild==null){
+        if (node.leftChild==null){                 //当前node就是最小 node
             Node rightNode=node.rightChild;
             node.rightChild=null;
             size--;
@@ -184,7 +188,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
         return node;
     }
     public void remove(E e){
-        remove(root,e);
+        root=remove(root,e);
     }
     private Node remove(Node node,E e){
         if (node==null)
@@ -245,14 +249,22 @@ public class BinarySearchTree<E extends Comparable<E>> {
     public static void main(String[] args){
         BinarySearchTree<Integer> binarySearchTree=new BinarySearchTree<>();
         int[] nums={5,3,4,6,8,2};
+        /*
+        *                   5
+        *              3          6
+        *          2      4             8
+        *
+        * */
         for (int num:nums){
             binarySearchTree.add(num);
         }
-//        binarySearchTree.preOrder();
+        binarySearchTree.preOrder();
+        System.out.println("---------------------");
+        binarySearchTree.midOrder();
+        System.out.println("---------------------");
+        binarySearchTree.postOrder();
         binarySearchTree.sequenceTravel();
-        binarySearchTree.removeMin();
-        System.out.println();
-        binarySearchTree.sequenceTravel();
+       // binarySearchTree.removeMin();
 //        binarySearchTree.removeMax();
 //        System.out.println();
 //        binarySearchTree.sequenceTravel();
