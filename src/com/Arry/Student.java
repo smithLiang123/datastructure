@@ -17,6 +17,9 @@ public class Student {
         ArrayNorm<Student> arr=new ArrayNorm<>();
         arr.addLast(new Student("Tom",100));
         arr.addLast(new Student("Tim",99));
+        arr.addLast(new Student("Tom",100));
+        arr.addLast(new Student("Tim",99));
+        arr.removeFirst();
 
        // arr.addLast(new Student("Tim",99));
       //  arr.addLast(new Student("Tim",99));

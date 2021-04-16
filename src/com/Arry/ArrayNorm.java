@@ -5,7 +5,7 @@ package com.Arry;
  *
  * 使用泛型
  * *让我们的数据结构可以放置“任何”数据类型
- * @不可以是基本数据类型，智能是对象
+ * @不可以是基本数据类型，只能是对象
  * @基本数据类型：boolean,byte,char,short,int,long,float,double
  * @每个基本类型对应的包装类：Boolean,Byte,Character,Short,Int,Long,Float,Double
  *
@@ -44,14 +44,16 @@ public class ArrayNorm<E> {
     public void addFirst(E e){
         add(0,e);
     }
-    //向数组中添加元素
+    /**
+     * 向数组中添加元素 从后往前遍历，知道index 后移一位数据，在index添加数据
+     * */
     public void add(int index,E e){
 
         if (index<0 || index>size){
             throw  new IllegalArgumentException("Add failed.Require index>=0 and <=size");
         }
 
-        if (size==data.length){
+        if (size==data.length){                     /**数组扩容*/
             resize(2* data.length);
         }
         for (int i=size-1;i>=index;i--){
@@ -124,7 +126,7 @@ public class ArrayNorm<E> {
     }
 
     public void resize(int newCapacity){
-        E[] newData=(E[])new Object[newCapacity];
+        E[] newData=(E[])new Object[newCapacity];   /**新建一个object对象数组 转换为E*/
         for (int i=0;i<size;i++){
             newData[i]=data[i];
         }
