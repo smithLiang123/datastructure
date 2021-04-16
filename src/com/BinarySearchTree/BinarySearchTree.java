@@ -27,10 +27,16 @@ public class BinarySearchTree<E extends Comparable<E>> {
     public boolean isEmpty(){
         return size==0;
     }
+    /**
+     * add逻辑
+     * root 不动 其他相对root 动
+     * */
     public void add(E e){
         root=add(root,e);
-
     }
+    /**
+     * 递归直到叶子节点出现空缺，当到NULL的时候直接 new 一个node
+     * */
     private Node add(Node node,E e){
         //是否为空
         if (node==null){
@@ -46,9 +52,13 @@ public class BinarySearchTree<E extends Comparable<E>> {
         //相等不变
         return node;
     }
+
     public boolean contains(E e){
         return contains(root,e);
     }
+    /**
+     * 不断 下沉 式搜索 比较
+     * */
     private boolean contains(Node node,E e){
         if (node==null)
             return false;
@@ -60,6 +70,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
             return contains(node.rightChild,e);
 
     }
+
     //深度优先
     public void preOrder(){
         preOrder(root);

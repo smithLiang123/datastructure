@@ -1,19 +1,21 @@
 package com.LinkedList;
 
 public class LinkedList<E> {
+    /**
+     * linkedList内部类 Node
+     * E e;          元素e
+     * Node next;    next node后一个元素
+     * */
     private class Node{
         public E e;
         public Node next;
-
         public Node(E e,Node next){
             this.e=e;
             this.next=next;
         }
-
         public Node(E e){
             this(e,null);
         }
-
         public Node(){
             this(null,null);
         }
@@ -22,37 +24,33 @@ public class LinkedList<E> {
             return e.toString();
         }
     }
-
-    private Node dummyHead;
-    int size;
-
+    //设置哑节点 dummyHead
+    private Node dummyHead;   //LinkedList的头结点
+    int size;                 //LinkedList的size大小
+    //linkedList的无参构造器，设置了一个哑节点。
     public LinkedList(){
         dummyHead=new Node(null,null);
         size=0;
     }
-
     public int getSize(){
         return size;
     }
-
     public boolean isEmpty(){
         return size==0;
     }
-
+    /**
+     *
+     * */
     public void add(int index,E e){
         if(index<0||index>size)
             throw new IllegalArgumentException("Add failed.Illegal index");
-
             Node prev=dummyHead;
-            for (int i=0;i<index;i++)
+            for (int i=0;i<index;i++)//不断后延，直到index的位置
                 prev=prev.next;
-
-            Node node=new Node(e);
+            Node node=new Node(e);    //新建一个node节点，prev-> new node(e) ->prev.next
             node.next=prev.next;
             prev.next=node;
-
             size++;
-
     }
 
     public void addLast(E e){
@@ -100,7 +98,11 @@ public class LinkedList<E> {
         }
         return false;
     }
-
+    /**
+     * 删除node节点
+     *
+     *
+     * */
     public E remove(int index){
         if (index<0||index>=size)
             throw new IllegalArgumentException("Removed failed. Index is Illegal");

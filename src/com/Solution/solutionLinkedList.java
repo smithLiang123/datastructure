@@ -1,5 +1,6 @@
 package com.Solution;
-
+import java.util.LinkedList;
+import java.util.List;
 public class solutionLinkedList {
     public  ListNode removeElements(ListNode head,int val){
         while (head.val==val&&head!=null){
