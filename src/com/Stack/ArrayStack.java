@@ -1,6 +1,14 @@
 package com.Stack;
 import com.Arry.ArrayNorm;
 public class ArrayStack<E> implements Stack<E>{
+    /**  Stack的通用函数
+     *     int grtSize();
+     *     boolean isEmpty();
+     *     void push(E e);
+     *     E pop();
+     *     E peek();
+     * */
+
     @Override
     public int grtSize() {
         return arr.getSize();

@@ -1,8 +1,13 @@
 package com.Queue;
 
-
 import com.Arry.ArrayNorm;
-
+/**  通用函数
+ *     int getSize();
+ *     boolean isEmpty();
+ *     void enqueue(E e);
+ *     E deQueue();
+ *     E getFront();
+ * */
 public class ArrayQueue<E>implements Queue<E> {
     private ArrayNorm<E> arr;
 

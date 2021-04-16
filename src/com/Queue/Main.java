@@ -5,7 +5,7 @@ import java.util.Random;
 //测试使用queue运行opCount个enqueue和dequeue操作所需要的时间，单位：秒
 public class Main {
 
-    private static double testQueue(Queue<Integer>q,int opCount){
+    private static double testQueue(Queue<Integer> q,int opCount){
 
         long startTime=System.nanoTime();
         Random random=new Random();

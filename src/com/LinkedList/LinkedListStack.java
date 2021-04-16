@@ -9,12 +9,6 @@ public class LinkedListStack<E> implements Stack<E> {
         list=new LinkedList<>();
     }
 
-
-
-
-
-
-
     @Override
     public E pop() {
         return list.removeFirst();
