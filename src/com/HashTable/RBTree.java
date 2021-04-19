@@ -1,4 +1,4 @@
-package com.RBTree;
+package com.HashTable;
 
 import java.util.ArrayList;
 

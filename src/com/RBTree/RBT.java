@@ -2,33 +2,58 @@ package com.RBTree;
 
 import java.util.ArrayList;
 
-public class RBTree<K extends Comparable<K>, V> {
+/**
+ * 《算法导论》中的红黑树   （黑平衡的二叉树）
+ * 1.每个节点或是红色的或是黑色的。
+ * 2.根节点是黑色的。
+ * 3.每一个叶子节点（最后的空节点）是黑色的
+ * 4.如果一个节点是红色的，那么他的孩子节点都是黑色的
+ * 5.从任意一个节点到叶子节点，经过的黑色子节点是一样的
+ *
+ * Robert Sedgewick 红黑树发明人
+ * 红黑树 与 2-3树的等价性    2节点 就是一个黑节点   3节点 由一红一黑两个节点组成
+ * 2-3树：两种节点    3节点          (4节点)      2节点
+ *         a       a b            a b c        b
+ *        / \     / | \                       / \
+ *        2节点      3节点                     a  c
+ *
+ *          4节点向上融合 然后提中位数 变成三个2节点
+ *
+ * 红黑树的逻辑实际上和 2-3树一样  2-3树是绝对平衡的
+ * 把 3节点中 值小一点的节点 染成红色
+ * 红黑树会向左倾斜
+ * 红节点的孩子一定是黑色的
+ * 黑节点的左子节点有可能是红色的，右子节点一定是黑色的
+ *
+ * 所有叶子节点走过黑色叶子节点深度一样:
+ *
+ * 最大高度:2logn   O(logn)
+ *
+ * 红黑树：增加数据的速度比AVL快
+ * AVL：查询数据速度比红黑树快
+ * */
+public class RBT<K extends Comparable<K>,V>{
 
-    private static final boolean RED = true;
-    private static final boolean BLACK = false;
 
+    private static final boolean RED=true;
+    private static final boolean BLACK=false;
     private class Node{
         public K key;
         public V value;
-        public Node left, right;
-        public boolean color;
+        public Node left,right;
+        public boolean color;       //
 
-        public Node(K key, V value){
+        public Node(K key,V value) {
             this.key = key;
             this.value = value;
             left = null;
             right = null;
-            color = RED;
+            color=RED;                    /**初始节点默认为红色，永远要和子节点融合*/
         }
     }
 
     private Node root;
     private int size;
-
-    public RBTree(){
-        root = null;
-        size = 0;
-    }
 
     public int getSize(){
         return size;
@@ -38,94 +63,109 @@ public class RBTree<K extends Comparable<K>, V> {
         return size == 0;
     }
 
-    // 判断节点node的颜色
+    /**判断节点的颜色*/
     private boolean isRed(Node node){
-        if(node == null)
+        if (node==null){
             return BLACK;
+        }
         return node.color;
     }
 
-    //   node                     x
-    //  /   \     左旋转         /  \
-    // T1   x   --------->   node   T3
-    //     / \              /   \
-    //    T2 T3            T1   T2
+    /**  左旋转过程   在 2节点添加元素
+     *   node                   x
+     *   /  \       左旋转      / \
+     *  T1   x   ------->   node  T3
+     *      / \             /  \
+     *    T2   T3         T1   T2
+     * */
     private Node leftRotate(Node node){
-
-        Node x = node.right;
-
-        // 左旋转
-        node.right = x.left;
-        x.left = node;
-
-        x.color = node.color;
-        node.color = RED;
-
+        Node x=node.left;
+        node.right=x.left;
+        x.left=node;
+        x.color=node.color;
+        node.color=RED;
         return x;
     }
 
-    //     node                   x
-    //    /   \     右旋转       /  \
-    //   x    T2   ------->   y   node
-    //  / \                       /  \
-    // y  T1                     T1  T2
+    /**
+     * 右旋转过程
+     *       node               x
+     *      /   \              / \
+     *     x    T2            y   node
+     *   /  \        右旋转        /  \
+     *  y   T1       ------>     T1   T2
+     *
+     * */
     private Node rightRotate(Node node){
+        Node x=node.left;
+        //右旋转
+        node.left=x.right;
+        x.right=node;
 
-        Node x = node.left;
-
-        // 右旋转
-        node.left = x.right;
-        x.right = node;
-
-        x.color = node.color;
-        node.color = RED;
+        x.color=node.color;
+        node.color=RED;
 
         return x;
     }
 
-    // 颜色翻转
+    /**  颜色翻转 */
     private void flipColors(Node node){
-
-        node.color = RED;
-        node.left.color = BLACK;
-        node.right.color = BLACK;
+        node.color=RED;
+        node.left.color=BLACK;
+        node.right.color=BLACK;
     }
 
-    // 向红黑树中添加新的元素(key, value)
-    public void add(K key, V value){
-        root = add(root, key, value);
-        root.color = BLACK; // 最终根节点为黑色节点
+
+
+
+    /**
+     * 向红黑树中添加元素
+     * 保持红黑树的根节点为黑色
+     * */
+    public void add(K key,V value){
+        root=add(root,key,value);
+        root.color=BLACK;
     }
+    /**                 左旋转        右旋转    颜色翻转
+     * 添加新元素          black       black
+     *                 /            /
+     *   black --->  red   --->   red  ---> black  --->red
+     *   /             \          /          /  \      /  \
+     * red               red     red       red  red  black black
+     *
+     * */
+    private Node add(Node node,K key,V value){
 
-    // 向以node为根的红黑树中插入元素(key, value)，递归算法
-    // 返回插入新节点后红黑树的根
-    private Node add(Node node, K key, V value){
-
-        if(node == null){
-            size ++;
-            return new Node(key, value); // 默认插入红色节点
+        if (node==null){
+            size++;
+            return new Node(key,value);
         }
 
-        if(key.compareTo(node.key) < 0)
-            node.left = add(node.left, key, value);
-        else if(key.compareTo(node.key) > 0)
-            node.right = add(node.right, key, value);
-        else // key.compareTo(node.key) == 0
-            node.value = value;
+        if (key.compareTo(node.key)<0){
+            node.left=add(node.left,key,value);
+        }
+        else if (key.compareTo(node.key)>0){
+            node.right=add(node.right,key,value);
+        }
+        else {
+            node.value=value;
+        }
 
-        if (isRed(node.right) && !isRed(node.left))
-            node = leftRotate(node);
 
-        if (isRed(node.left) && isRed(node.left.left))
-            node = rightRotate(node);
-
-        if (isRed(node.left) && isRed(node.right))
+        //三个红黑树性质维护
+        if (isRed(node.right)&& !isRed(node.left)){
+            node=leftRotate(node);
+        }
+        if (isRed(node.left)&& isRed(node.left.left)){
+            node=rightRotate(node);
+        }
+        if (isRed(node.left) && isRed(node.right)){
             flipColors(node);
+        }
 
         return node;
     }
 
-    // 返回以node为根节点的二分搜索树中，key所在的节点
     private Node getNode(Node node, K key){
 
         if(node == null)
@@ -235,6 +275,8 @@ public class RBTree<K extends Comparable<K>, V> {
         }
     }
 
+
+
     public static void main(String[] args){
 
         System.out.println("Pride and Prejudice");
@@ -243,7 +285,7 @@ public class RBTree<K extends Comparable<K>, V> {
         if(FileOperation.readFile("pride-and-prejudice.txt", words)) {
             System.out.println("Total words: " + words.size());
 
-            RBTree<String, Integer> map = new RBTree<>();
+            RBT<String, Integer> map = new RBT<>();
             for (String word : words) {
                 if (map.contains(word))
                     map.set(word, map.get(word) + 1);
@@ -258,4 +300,23 @@ public class RBTree<K extends Comparable<K>, V> {
 
         System.out.println();
     }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
