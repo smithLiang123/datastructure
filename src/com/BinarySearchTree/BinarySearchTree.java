@@ -169,7 +169,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
             size--;
             return rightNode;
         }
-        node.leftChild=removeMin(node.leftChild);
+        node.leftChild=removeMin(node.leftChild);    //此处有递归，将删除节点的右子树，接到了原位置
         return node;
     }
     public E removeMax(){
@@ -190,6 +190,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
     public void remove(E e){
         root=remove(root,e);
     }
+
     private Node remove(Node node,E e){
         if (node==null)
             return null;
@@ -268,7 +269,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 //        binarySearchTree.removeMax();
 //        System.out.println();
 //        binarySearchTree.sequenceTravel();
-        binarySearchTree.remove(5);
+        binarySearchTree.removeMin();
         System.out.println();
         binarySearchTree.sequenceTravel();
 
