@@ -35,7 +35,7 @@ public class Main {
             endTime=System.nanoTime();
             time=(endTime-startTime)/1000000000.0;
             System.out.println("Total different words: "+trie.getSize());
-            System.out.println("TreeSet "+time+"s");
+            System.out.println("TrieSet "+time+"s");
 
 
         }
